@@ -17,3 +17,13 @@ export async function insertOrder(note, user_id) {
     console.error(error);
   }
 }
+
+export async function getOrdersByUserById(id) {
+  try {
+    const query = ` SELECT * FROM orders WHERE user_id = $1;`;
+    const { rows: orders } = await db.query(query, [id]);
+    return orders;
+  } catch (error) {
+    console.error(error);
+  }
+}
