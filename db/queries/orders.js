@@ -22,11 +22,23 @@ export async function insertOrder(date, note, user_id) {
   }
 }
 
-export async function getOrdersByUserById(id) {
+export async function getOrdersByUserId(id) {
   try {
     const query = ` SELECT * FROM orders WHERE user_id = $1;`;
     const { rows: orders } = await db.query(query, [id]);
     return orders;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+export async function getOrdersByOrderId(id) {
+  try {
+    const query = ` SELECT * FROM orders WHERE id = $1;`;
+    const {
+      rows: [order],
+    } = await db.query(query, [id]);
+    return order;
   } catch (error) {
     console.error(error);
   }
