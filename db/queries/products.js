@@ -40,3 +40,20 @@ export async function getProductById(id) {
     console.error(error);
   }
 }
+
+export async function getProductOrders(product_id) {
+  try {
+    const query = `
+    SELECT o.id
+    FROM orders AS o
+    INNER JOIN orders_products AS op
+    	ON op.order_id = o.id
+    WHERE op.product_id = $1;
+    `;
+
+    const { rows: orders } = await db.query(query, [product_id]);
+    return orders;
+  } catch (error) {
+    console.error(error);
+  }
+}
