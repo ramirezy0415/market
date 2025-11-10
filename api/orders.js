@@ -8,6 +8,7 @@ import {
   getOrdersByOrderId,
   getOrderProducts,
 } from "#db/queries/orders";
+import { insertOrderProducts } from "#db/queries/orders_products";
 import requireUser from "#middleware/requireUser";
 import requireBody from "#middleware/requireBody";
 
@@ -67,3 +68,26 @@ router.post("/", requireBody(["date"]), async (req, res) => {
     console.error(error);
   }
 });
+
+router.post(
+  "/:id/products",
+  requireBody(["title", "description", "price", "quantity"]),
+  async (req, res) => {
+    try {
+      const { id } = req.params;
+      const { title, description, price, quantity } = req.body;
+      // insert product
+      const product = await insertProduct(title, description, price);
+
+      if (!product) return res.status(500).send("Unable to insert product");
+      //inser orders_products
+      const order_product = await insertOrderProducts(id, product.id, quantity);
+      if (!order_product)
+        return res.status(500).send("Unable to insert quantity");
+
+      return res.status(201).send([product, order_product]);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+);
