@@ -43,3 +43,18 @@ export async function getOrdersByOrderId(id) {
     console.error(error);
   }
 }
+
+export async function getOrderProducts(id) {
+  try {
+    const query = `
+    SELECT p.*
+    FROM products AS p
+    INNER JOIN orders_products AS op
+      ON op.product_id = p.id
+    WHERE op.order_id = $1;`;
+    const { rows: products } = await db.query(query, [id]);
+    return products;
+  } catch (error) {
+    console.error(error);
+  }
+}

@@ -6,6 +6,7 @@ import {
   getOrdersByUserId,
   insertOrder,
   getOrdersByOrderId,
+  getOrderProducts,
 } from "#db/queries/orders";
 import requireUser from "#middleware/requireUser";
 import requireBody from "#middleware/requireBody";
@@ -38,6 +39,16 @@ router.get("/:id", async (req, res) => {
     }
 
     return res.status(200).send(order);
+  } catch (error) {
+    console.error(error);
+  }
+});
+
+router.get("/:id/products", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const order_products = await getOrderProducts(id);
+    return res.status(200).send(order_products);
   } catch (error) {
     console.error(error);
   }
