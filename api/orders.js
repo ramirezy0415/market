@@ -8,8 +8,8 @@ import {
   getOrdersByOrderId,
   getOrderProducts,
 } from "#db/queries/orders";
+import { getProductById } from "#db/queries/products";
 import { insertOrderProducts } from "#db/queries/orders_products";
-import { insertProduct } from "#db/queries/products";
 import requireUser from "#middleware/requireUser";
 import requireBody from "#middleware/requireBody";
 
@@ -78,10 +78,18 @@ router.post(
       const { id } = req.params;
       const { productId, quantity } = req.body;
 
+      const order = await getOrdersByOrderId(id);
+      if (!order) {
+        return res.status(404).send(`Orders with id ${id} do not exist`);
+      }
+
+      const product = await getProductById(productId);
+      if (!product) {
+        return res.status(400).send(`Orders with id ${id} do not exist`);
+      }
+
       //insert orders_products
       const order_product = await insertOrderProducts(id, productId, quantity);
-      if (!order_product)
-        return res.status(400).send("Unable to insert quantity");
 
       return res.status(201).send(order_product);
     } catch (error) {
