@@ -40,10 +40,11 @@ router.get("/:id/orders", requireUser, async (req, res) => {
     const { id } = req.params;
     const orders = await getProductOrders(id);
 
-    if (!orders) {
+    if (orders.length === 0) {
       return res.status(404).send("No order found for product.");
     }
-    return res.send(orders);
+
+    return res.status(200).send(orders);
   } catch (error) {
     console.error(error);
   }
