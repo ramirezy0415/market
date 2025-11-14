@@ -8,9 +8,6 @@ import {
   getProductOrders,
 } from "#db/queries/products";
 import requireUser from "#middleware/requireUser";
-import getUserFromToken from "#middleware/getUserFromToken";
-
-router.use(getUserFromToken);
 
 router.get("/", async (req, res) => {
   try {

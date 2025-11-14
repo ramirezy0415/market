@@ -13,8 +13,6 @@ import { insertOrderProducts } from "#db/queries/orders_products";
 import requireUser from "#middleware/requireUser";
 import requireBody from "#middleware/requireBody";
 
-import getUserFromToken from "#middleware/getUserFromToken";
-router.use(getUserFromToken);
 router.use(requireUser);
 
 router.get("/", async (req, res) => {
